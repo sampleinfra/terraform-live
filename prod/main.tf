@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     digitalocean = "= 1.14"
-    tls = "= 2.1.1"
+    tls          = "= 2.1.1"
   }
 }
 
@@ -20,8 +20,8 @@ resource "digitalocean_domain" "prod" {
 }
 
 resource "tls_private_key" "prod" {
-  algorithm   = "RSA"
-  rsa_bits = "4096"
+  algorithm = "RSA"
+  rsa_bits  = "4096"
 }
 
 resource "digitalocean_ssh_key" "prod" {
