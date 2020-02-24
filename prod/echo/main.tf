@@ -2,10 +2,15 @@ terraform {
   required_providers {
     digitalocean = "= 1.14"
     http         = "= 1.1.1"
+    docker       = "= 2.7"
   }
 }
 
 provider "digitalocean" {}
+
+provider "docker" {
+  host = "ssh://root@${digitalocean_droplet.docker01.ipv4_address}:22"
+}
 
 data "http" "icanhazip" {
   url = "http://icanhazip.com"
@@ -61,10 +66,30 @@ resource "digitalocean_firewall" "web" {
 }
 
 resource "digitalocean_droplet" "docker01" {
-  image    = "docker-18-04"
-  name     = "docker-01"
-  region   = var.do_region
-  size     = "s-1vcpu-1gb"
-  ssh_keys = [data.terraform_remote_state.shared.outputs.ssh_key_id]
-  tags     = ["tf"]
+  image     = "docker-18-04"
+  name      = "docker-01"
+  region    = var.do_region
+  size      = "s-1vcpu-1gb"
+  ssh_keys  = [data.terraform_remote_state.shared.outputs.ssh_key_id]
+  tags      = ["tf"]
+  user_data = <<EOF
+#!/bin/bash
+useradd -M echo
+EOF
+}
+
+resource "docker_image" "echo" {
+  name = "jmalloc/echo-server:latest"
+}
+
+resource "docker_container" "echo" {
+  image = docker_image.echo.latest
+  name  = "echo"
+
+  user = "1000:1000"
+
+  ports {
+    internal = 8080
+    external = 80
+  }
 }
