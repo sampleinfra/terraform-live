@@ -98,5 +98,5 @@ resource "digitalocean_record" "echo" {
   domain = data.terraform_remote_state.shared.outputs.domain_name
   type   = "A"
   name   = "echo"
-  value  =  digitalocean_droplet.docker01.ipv4_address
+  value  = digitalocean_droplet.docker01.ipv4_address
 }
