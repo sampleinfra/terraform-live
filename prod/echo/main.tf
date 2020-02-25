@@ -4,6 +4,7 @@ terraform {
     http         = "= 1.1.1"
     docker       = "= 2.7"
   }
+}
 
 provider "digitalocean" {}
 
