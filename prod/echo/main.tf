@@ -9,7 +9,7 @@ terraform {
 provider "digitalocean" {}
 
 provider "docker" {
-  host = "ssh://root@${digitalocean_droplet.docker01.ipv4_addres}:22"
+  host = "ssh://root@${digitalocean_droplet.docker01.ipv4_address}:22"
 }
 
 data "http" "icanhazip" {
