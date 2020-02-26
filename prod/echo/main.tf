@@ -3,8 +3,8 @@ terraform {
     digitalocean = "= 1.14"
     http         = "= 1.1.1"
     docker       = "= 2.7"
-    acme = "= 1.5"
-    tls = "= 2.1.1"
+    acme         = "= 1.5"
+    tls          = "= 2.1.1"
   }
 }
 
@@ -116,8 +116,8 @@ resource "acme_registration" "reg" {
 }
 
 resource "acme_certificate" "certificate" {
-  account_key_pem           = acme_registration.reg.account_key_pem
-  common_name               = "echo.sampleinfra.com"
+  account_key_pem = acme_registration.reg.account_key_pem
+  common_name     = "echo.sampleinfra.com"
 
   dns_challenge {
     provider = "digitalocean"
