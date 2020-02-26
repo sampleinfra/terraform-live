@@ -94,9 +94,8 @@ resource "docker_container" "echo" {
 
   user = "1000:1000"
 
-  ports {
-    internal = 8080
-    external = 80
+  networks_advanced {
+    name = "bridge"
   }
 }
 
@@ -133,16 +132,25 @@ resource "docker_container" "tls_proxy" {
   image = docker_image.tls_proxy.latest
   name  = "tls_proxy"
 
-  user = "1000:1000"
-
   ports {
     internal = 443
     external = 443
   }
+  ports {
+    internal = 80
+    external = 80
+  }
+
+  networks_advanced {
+    name = "bridge"
+  }
 
   env = [
     "TLS_CERTIFICATE=${acme_certificate.certificate.certificate_pem}",
-    "TLS_KEY=${acme_certificate.certificate.private_key_pem}"
+    "TLS_KEY=${acme_certificate.certificate.private_key_pem}",
+    "UPSTREAM_HOST=${docker_container.echo.network_data[0]["ip_address"]}",
+    "UPSTREAM_PORT=8080",
+    "FORCE_HTTPS=true"
   ]
 }
 
