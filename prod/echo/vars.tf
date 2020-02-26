@@ -3,3 +3,4 @@ variable "do_region" {
 }
 
 variable "email" {}
+variable "do_auth_token" {}

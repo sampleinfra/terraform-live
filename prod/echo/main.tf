@@ -8,7 +8,9 @@ terraform {
   }
 }
 
-provider "digitalocean" {}
+provider "digitalocean" {
+  token = var.do_auth_token
+}
 
 provider "docker" {
   host = "ssh://root@${digitalocean_droplet.docker01.ipv4_address}:22"
@@ -121,6 +123,10 @@ resource "acme_certificate" "certificate" {
 
   dns_challenge {
     provider = "digitalocean"
+
+    config = {
+      DO_AUTH_TOKEN = var.do_auth_token
+    }
   }
 }
 
