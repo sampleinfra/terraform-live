@@ -131,7 +131,7 @@ resource "acme_certificate" "certificate" {
 }
 
 resource "docker_image" "tls_proxy" {
-  name = "flaccid/tls-proxy"
+  name = "sampleinfra/docker-tls-proxy"
 }
 
 resource "docker_container" "tls_proxy" {
