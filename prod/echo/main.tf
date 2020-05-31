@@ -5,6 +5,7 @@ terraform {
     docker       = "= 2.7"
     acme         = "= 1.5"
     tls          = "= 2.1.1"
+    null         = "= 2.1.2"
   }
 }
 
@@ -84,6 +85,16 @@ resource "digitalocean_droplet" "docker01" {
 #!/bin/bash
 useradd -M echo
 EOF
+}
+
+resource "null_resource" "ssh_keyscan" {
+  triggers = {
+    docker01_ip = digitalocean_droplet.docker01.ipv4_address
+  }
+  provisioner "local-exec" {
+    command = "sleep 60 && ssh-keyscan -H ${digitalocean_droplet.docker01.ipv4_address} >> ~/.ssh/known_hosts"
+  }
+  depends_on = [digitalocean_firewall.web]
 }
 
 resource "docker_image" "echo" {
